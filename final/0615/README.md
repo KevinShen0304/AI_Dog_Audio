@@ -1,12 +1,11 @@
 資料放置:
 .\train\train : 訓練集音頻
 .\train\noise_foraug : 背景音頻
-.\predict\private_test : private音頻
-.\predict\public_test : public音頻
 
 (刪除音頻不足5s之音檔與資料)
 
 程式執行順序:
+
 1-1.gene_img
 產生頻譜圖
 1-2.aug_maker_backgroundnoise
@@ -24,6 +23,4 @@
 
 4.predict_With_private
 預測結果(包含private_test&public_test)
-
-
 
