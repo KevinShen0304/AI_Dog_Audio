@@ -1,0 +1,15 @@
+| train
+    |noise_foraug (資料增強所需背景音)
+        | rain.wav 
+        | ...
+    |train (訓練集資料，依照編號分類)
+        | 0
+            |train_0000.wav
+            |train_0001.wav
+            |...
+        | 1 
+            |train_0201.wav
+    (以下會自動產生)
+    |melspectrogram_dataset(訓練集頻譜圖)
+    |melspectrogram_dataset_aug(訓練集增強後頻譜圖)
+    |audio_aug(訓練集增強後音檔)
