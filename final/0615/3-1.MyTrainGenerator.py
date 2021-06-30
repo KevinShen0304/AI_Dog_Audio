@@ -8,12 +8,14 @@ import random
 import cv2
 import glob
 import os
+import numpy as np
 from audiomentations import SpecCompose, SpecFrequencyMask
 # In[] 
 class MyTrainGenerator():
-    def __init__(self, directory, imgs_files, y_onehot, index, batch_size, audio_aug_range, aug_bool=True, audio_aug_bool=True):
+    def __init__(self, directory, imgs_files, y, y_onehot, index, batch_size, audio_aug_range, aug_bool=True, audio_aug_bool=True):
         self.directory = directory
         self.y_onehot = y_onehot
+        self.y = y
         self.index = index
         self.batch_size = batch_size
         self.imgs_files = imgs_files
@@ -31,15 +33,17 @@ class MyTrainGenerator():
             for i in self.index:
                 if self.audio_aug_bool:
                     aug_index = str(random.randint(0,self.audio_aug_range)) #隨機取一個編號
-                    file = os.path.join(self.directory, self.imgs_files[i], f'{self.imgs_files[i]}_{aug_index}.png')
+                    file = os.path.join(self.directory, self.y[i], self.imgs_files[i], f'{self.imgs_files[i]}_{aug_index}.png')
                 else:
                     file = os.path.join(self.directory, self.imgs_files[i]+'.png')
                 
-                image = cv2.imread(file)
+                image = cv2.imread(file, 0)
+                
                 if self.aug_bool:
                     image = self.augmenter(magnitude_spectrogram=image)
                     
                 image = image/255.0
+                image = image.reshape(image.shape[0],image.shape[1],1)
                 image_batch.append( image )
                 
                 y = self.y_onehot[i]

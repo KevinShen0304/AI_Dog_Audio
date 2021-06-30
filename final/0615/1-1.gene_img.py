@@ -14,13 +14,17 @@ import glob
 # Global vars
 SAMPLE_RATE = 8000
 SIGNAL_LENGTH = 5 # seconds
-SPEC_SHAPE = (100, 500) # height x width
-FMIN = 0 
-FMAX = SAMPLE_RATE//2
+SPEC_SHAPE = (128, 128*4) # height x width
+FMIN = 0
+FMAX = 4000
+LENGTH = SAMPLE_RATE*SIGNAL_LENGTH
 
 # In[2]
 def get_spectrograms(filepath, output_dir):
     sig, rate = librosa.load(filepath, sr=SAMPLE_RATE, offset=None, duration=5) #  duration=5(s)
+
+    zeros = np.zeros(LENGTH - len(sig)) #補0數量
+    sig = np.append(sig, zeros)
     
     hop_length = int(SIGNAL_LENGTH * SAMPLE_RATE / (SPEC_SHAPE[1] - 1))
     mel_spec = librosa.feature.melspectrogram(y=sig, 
@@ -39,7 +43,7 @@ def get_spectrograms(filepath, output_dir):
     
     mel_spec = 255 * mel_spec #轉為圖片
     mel_img = mel_spec.astype(np.uint8) #
-    mel_img = cv2.resize(mel_img, SPEC_SHAPE)
+    mel_img = cv2.resize(mel_img, (SPEC_SHAPE[1],SPEC_SHAPE[0]))
     #mel_img = cv2.cvtColor(mel_img, cv2.COLOR_GRAY2BGR) #轉為BGR # cv2讀取默認BGR
     
     # Save as image file

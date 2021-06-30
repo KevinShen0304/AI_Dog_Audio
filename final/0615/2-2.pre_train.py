@@ -43,7 +43,6 @@ with tqdm(total=len(img_paths)) as pbar:
         X.append( im )
 
 X = np.array(X)
-
 y = np.array(y)
 # In[7]model
 SPEC_SHAPE = [X.shape[1], X.shape[2], X.shape[3]]
@@ -60,7 +59,7 @@ folds = StratifiedKFold(n_splits=5, shuffle=True, random_state=4500)
 for fold_, (trn_idx, val_idx) in enumerate(folds.split(X,y)):
     #if fold_>0: break
     print(fold_)
-    print(val_idx)
+    #print(val_idx)
     x_val = X[val_idx]
     y_val = y_onehot[val_idx]
     x_train = X[trn_idx]
@@ -69,7 +68,7 @@ for fold_, (trn_idx, val_idx) in enumerate(folds.split(X,y)):
     # call
     log_dir = '..\\log\\'
     logging = TensorBoard(log_dir=log_dir)
-    reduce_lr = ReduceLROnPlateau(monitor='loss', patience=30, verbose=1, 
+    reduce_lr = ReduceLROnPlateau(monitor='loss', patience=50, verbose=1, 
                                   factor=0.75, min_lr=0.000001)
     checkpoint = ModelCheckpoint(log_dir + 'fold' + str(fold_)+  
                                  'ep{epoch:02d}-loss{loss:.3f}-accuracy{accuracy:.3f}-auc{auc:.3f}-val_loss{val_loss:.3f}-val_accuracy{val_accuracy:.3f}-val_auc{val_auc:.3f}.h5',
